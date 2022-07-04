@@ -20,7 +20,8 @@ DatosAutomata = {
 	"APDescubiertos" : [],
 	"Estado" : 0,
 	"Simbolo" : "",
-	"Server" : "http://api.trackme/",
+	"Server" : "http://api.trackme",
+	"Puerto" : "8080",
 	"MetodoEntrega" : "vecindario",
 	"MetodoPing" : "ping"
 }
@@ -32,7 +33,7 @@ def inicial():
 def buscando():
 	#Colocando en modo estacion
 	wlan = network.WLAN(network.STA_IF) # create station interface
-	wlan.active(True)       # activate the interface
+	wlan.active(True)	   # activate the interface
 	lAPSSID = []
 	##################################################################
 	# Escaneo de las redes inalambrcas
@@ -45,8 +46,9 @@ def buscando():
 			
 			if not ssid in lAPSSID:
 				lAPSSID.append(ssid)
-			if not bssid in DatosAutomata['APDescubiertos']
-				DatosAutomata['APDescubiertos'].append(bssid)
+			if len( DatosAutomata['APDescubiertos']) < 15:
+				if not bssid in DatosAutomata['APDescubiertos']:
+					DatosAutomata['APDescubiertos'].append(bssid)
 		# credenciales
 		Cred = None
 		
@@ -69,7 +71,7 @@ def buscando():
 						Segundos = Segundos + 1
 						start = time.ticks_ms()
 				if wlan.isconnected():
-					    print('network config:', wlan.ifconfig())
+						print('network config:', wlan.ifconfig())
 						DatosAutomata["Estado"] = 2
 						DatosAutomata["Simbolo"] = "Conectado"
 						return
@@ -91,7 +93,7 @@ def anclado():
 		# Enviando la lista de APDescubiertos
 		try:
 			post_data = ujson.dumps(DatosAutomata['APDescubiertos'])
-			request_url = DatosAutomata['Server'] + DatosAutomata['MetodoEntrega']
+			request_url = DatosAutomata['Server']+':'+DatosAutomata['Puerto']+'/'+ DatosAutomata['MetodoEntrega']
 			requests.post(request_url, headers = {'content-type': 'application/json'}, data = post_data)
 			Enviado = True
 		except:
@@ -109,7 +111,7 @@ def anclado():
 		if Segundos > 4:
 			Segundos = 0
 			try: # Realizando el ping al servidor
-				requests.get(DatosAutomata['Server'] + DatosAutomata['MetodoPing'])
+				requests.get(DatosAutomata['Server']+':'+DatosAutomata['Puerto']+'/' + DatosAutomata['MetodoPing'])
 			except:
 				Conexion_Perdida = True
 		delta = time.ticks_diff(time.ticks_ms(), start) # compute time difference
@@ -124,7 +126,7 @@ def visible():
 	ap = network.WLAN(network.AP_IF) # create access-point interface
 	ap.config(ssid='TRCKME') # set the SSID of the access point
 	ap.config(max_clients=1) # set how many clients can connect to the network
-	ap.active(True)         # activate the interface
+	ap.active(True)		 # activate the interface
 	# Visisble por 15 segundos
 	Segundos  = 0
 	start = time.ticks_ms() # get millisecond counter
@@ -138,7 +140,6 @@ def visible():
 	DatosAutomata["Simbolo"] = "Listo"
 	
 def run():
-	
 	while True:
 		if DatosAutomata["Estado"] == 0:
 			inicial()
