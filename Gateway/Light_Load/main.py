@@ -9,32 +9,63 @@ import requests
 
 app = Flask(__name__)
 
+# este metodo se agrega cuando un dispositivo de conecta 
+# al gateway
 @app.route("/vecindario",methods=['POST'])
 def vecindario():
 	r_data = request.get_json()
 	#######################################
-	
 	print(request.remote_addr)
 	mac = getMACfromIP(request.remote_addr)
+	print(mac)
 	if not mac:
 		print('Auch')
-		return r_data
+		return jsonify(R = "Auch")
 	carga_Util = {
 		"Token": TOKEN,
 		"Dispositivo" :  mac,
-		"Data": [r.replace(":","-").upper() for r in r_data] 
+		"Data": [r.upper() for r in r_data] 
 	}
+	print(carga_Util)
 	try:
-		requests.post(CLOUD_SERVER, data = carga_Util)
+		requests.post(
+			CLOUD_SERVER + "/registrar", 
+			headers = {'content-type': 'application/json'}, 
+			data = carga_Util
+		)
 	except Exception as err:
 		pass
 	else:
 		print('Success!')
-	print(r_data)
-	return r_data
 	
+	return jsonify(R = "ok")
+
+# Este metodo se ejecuta para mantener al gateway
 @app.route("/ping",methods=['GET'])
 def ping():
+	print(request.remote_addr)
+	mac = getMACfromIP(request.remote_addr)
+	print(mac)
+	if not mac:
+		print('Auch')
+		return jsonify(R = "Auch")
+	carga_Util = {
+		"Token": TOKEN,
+		"Dispositivo" :  mac,
+	}
+	print(carga_Util)
+	#######################################
+	try:
+		requests.post(
+			CLOUD_SERVER + "/actualizar",
+			headers = {'content-type': 'application/json'}, 
+			data = carga_Util
+		)
+	except Exception as err:
+		pass
+	else:
+		print('Success!')
+	#######################################
 	return jsonify(R = "pong")
 	
 	
