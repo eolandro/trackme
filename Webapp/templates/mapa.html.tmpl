@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<title>{{ t_title }}</title>
+		<link rel="icon" type="image/png" href="/rs/img/ico.png">
+		{% for t_css in l_css %}
+		<link rel="stylesheet" type="text/css" href="{{ t_css }}">
+		{% endfor %}
+		
+		{% for t_js in l_js %}
+		<script src="{{ t_js }}" defer></script>
+		{% endfor %}
+	</head>
+	<body class="is-grayl">
+		{% include "navbar.html.tmpl" ignore missing %}
+		<!--///////////////////////////////////////////////////-->
+		<div id="vuejs">
+			<div class="columns">
+				<!--#################################################-->
+				<div class="column">
+					<br>
+				</div>
+				<!--#################################################-->
+				<div class="column is-two-thirds" id="pixijs">
+				</div>
+				<!--#################################################-->
+				<div class="column">
+					<br>
+				</div>
+				<!--#################################################-->
+			</div>
+		</div>
+		{% raw %}
+		{% endraw %}
+	</body>
+</html>

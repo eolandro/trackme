@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<title>{{ t_title }}</title>
+		<link rel="icon" type="image/png" href="/rs/img/ico.png">
+		{% for t_css in l_css %}
+		<link rel="stylesheet" type="text/css" href="{{ t_css }}">
+		{% endfor %}
+		
+		{% for t_js in l_js %}
+		<script src="{{ t_js }}" defer></script>
+		{% endfor %}
+	</head>
+	<body class="is-grayl">
+		{% include "navbar.html.tmpl" ignore missing %}
+		<!--///////////////////////////////////////////////////-->
+		<div>
+		{% raw %}
+		<div class="columns">
+			<div class="column">
+			</div>
+			<!--#################################################-->
+			<div class="column is-11" id="workflow">
+				<br>
+				<!--
+				<tr is="product-row" v-for="s in salidas" v-bind:key="s.nodocumento" v-bind:info="s" ></tr>
+				<div class="columns">
+					<div class="column"><label class="label">Folio {{ }}</label></div>
+				</div>-->
+				<div id="vuedispositivo">
+					
+				<div class="columns">
+					<!--#################################################-->
+					<div class="column">
+						<div class="field">
+							<label class="label">Mac</label>
+							<div class="control">
+								<input class="input"  id="txtmac" v-model="txtmac" type="text" :disabled="isDisabled" placeholder="11335e48c022">
+								
+							</div>
+						</div>
+						<div class="field">
+							<label class="label">Nombre del dispositivo</label>
+							<div class="control">
+								<input class="input"  id="txtnom" v-model="txtnom" type="text" :disabled="isDisabled">
+								
+							</div>
+						</div>
+						<!--------------------------------------------------->
+						<!--------------------------------------------------->
+						<!--------------------------------------------------->
+						
+						
+					</div>
+					<!--#################################################-->
+				</div>
+				<div class="columns">
+					<div class="column">
+						<div class="field is-grouped is-grouped-centered">
+							<div class="control">
+								<button class="button is-primary is-fullwidth" type="button" @click="doOk">Aceptar</button>
+							</div>
+							<p class="control">
+								<button class="button is-danger is-fullwidth" @click="cancelar">
+									Cancelar
+								</button>
+							</p>
+						</div>
+					</div>
+				</div>
+				
+				</div>
+				
+				<div class="columns" id="vueprod">
+					<div class="column">
+						<!---------------------------------------------------->
+						<!---------------------------------------------------->
+					</div>
+				</div>
+			</div>
+			<div class="column">
+				<br>
+			</div>
+		</div>
+		
+
+		{% endraw %}
+			<!--///////////////////////////////////////////////////-->
+		</div>
+	</body>
+</html>

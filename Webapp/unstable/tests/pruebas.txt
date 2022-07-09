@@ -1,0 +1,14 @@
+E0D55E48C0BA
+
+2a12640dfaf100dff963464aff6adcc08c5e513e86e04862db95cc439f87d2a3
+
+carga_Util = {
+	"GWY": '2a12640dfaf100dff963464aff6adcc08c5e513e86e04862db95cc439f87d2a3',
+	"DSP" :  'E0D55E48C0BA',
+}
+
+R = requests.post(
+	"http://127.0.0.1:9000/api/registrar", 
+	headers = {'content-type': 'application/json'}, 
+	data = carga_Util
+)

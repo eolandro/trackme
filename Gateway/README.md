@@ -28,3 +28,6 @@ Para correr propiamente se ejecuta como
 screen -dmS Gateway pipenv run main.py 
 
 dentro de la carpeta Light_Load o Heavy_Load (To-Do)
+
+## Notas 
+Los codigos de gateway actuales solo soportan una torre por gateway

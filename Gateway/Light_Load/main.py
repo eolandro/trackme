@@ -4,6 +4,7 @@ from config import TOKEN # url del servidor externo
 from fn import getMACfromIP
 from flask import jsonify
 from flask import Flask, request
+from flask import json
 from waitress import serve
 import requests
 
@@ -22,16 +23,16 @@ def vecindario():
 		print('Auch')
 		return jsonify(R = "Auch")
 	carga_Util = {
-		"Token": TOKEN,
-		"Dispositivo" :  mac,
-		"Data": [r.upper() for r in r_data] 
+		"GWY": TOKEN,
+		"DSP" :  mac,
+		"DAT": [r.upper() for r in r_data] 
 	}
 	print(carga_Util)
 	try:
 		requests.post(
 			CLOUD_SERVER + "/registrar", 
 			headers = {'content-type': 'application/json'}, 
-			data = carga_Util
+			data = json.dumps(carga_Util)
 		)
 	except Exception as err:
 		pass
@@ -50,8 +51,8 @@ def ping():
 		print('Auch')
 		return jsonify(R = "Auch")
 	carga_Util = {
-		"Token": TOKEN,
-		"Dispositivo" :  mac,
+		"GWY": TOKEN,
+		"DSP" :  mac,
 	}
 	print(carga_Util)
 	#######################################
@@ -59,7 +60,7 @@ def ping():
 		requests.post(
 			CLOUD_SERVER + "/actualizar",
 			headers = {'content-type': 'application/json'}, 
-			data = carga_Util
+			data = json.dumps(carga_Util)
 		)
 	except Exception as err:
 		pass

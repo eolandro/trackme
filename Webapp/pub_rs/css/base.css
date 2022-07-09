@@ -1,0 +1,18 @@
+html, body{
+	height: 100%;
+}
+
+
+.is-banco {
+    background-color: #00d1b2;
+    color: #fff;
+    background-size: cover;
+}
+.is-grayl {
+    background-color: #f5f6f7;
+    color: #010101;
+}
+
+.invisible{
+	display: none !important;
+}

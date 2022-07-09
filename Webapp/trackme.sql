@@ -1,0 +1,52 @@
+CREATE TABLE IF NOT EXISTS usuario (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+nombreacceso VARCHAR(45) NULL,
+contrasena VARCHAR(256) NULL,
+correo VARCHAR(256) NULL,
+jsondata TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS acceso (
+id	INTEGER,
+token	varchar(64) NOT NULL,
+usuario_id	INT NOT NULL,
+login	DATETIME NOT NULL,
+reject	INT NOT NULL,
+jsondata	TEXT NOT NULL,
+PRIMARY KEY("id" AUTOINCREMENT)
+);
+
+CREATE TABLE IF NOT EXISTS dispositivo (
+macaddress VARCHAR(16) PRIMARY KEY,
+nombrecorto VARCHAR(45) NULL,
+usuario_id INT NULL
+);
+
+CREATE TABLE IF NOT EXISTS gateway (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+token VARCHAR(128) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS torre (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+ubicacion VARCHAR(100) NOT NULL,
+gateway_id INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS entorres (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+dispositivo_mac VARCHAR(16) NOT NULL,
+torre_id INT NOT NULL,
+fechahora DATETIME NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS cercatorres (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+dispositivo_mac VARCHAR(16) NOT NULL,
+dispositivo_ref VARCHAR(16) NOT NULL,
+torre_id INT NOT NULL,
+fechahora DATETIME NOT NULL
+);
+
+INSERT INTO "usuario" ("id","nombreacceso","contrasena","correo","jsondata") VALUES (1,'super','73d1b1b1bc1dabfb97f216d897b7968e44b06457920f00f2dc6c1ed3be25ad4c','super@super.com','""');

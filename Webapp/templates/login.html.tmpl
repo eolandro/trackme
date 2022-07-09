@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name=viewport content="width=device-width, initial-scale=1">
+		<title>{{ t_title }}</title>
+		<link rel="icon" type="image/png" href="/rs/img/ico.png">
+		{% for t_css in l_css %}
+		<link rel="stylesheet" type="text/css" href="{{ t_css }}">
+		{% endfor %}
+		
+		{% for t_js in l_js %}
+		<script src="{{ t_js }}" defer></script>
+		{% endfor %}
+	</head>
+	<body class="is-grayl">
+		<nav class="navbar is-banco" role="navigation" aria-label="main navigation">
+			<div class="navbar-brand">
+				<a class="navbar-item" href="/">
+					<img src="/rs/img/c.png" width="112" height="28">
+				</a>
+				
+				<button class="button navbar-burger">
+					<span></span>
+					<span></span>
+					<span></span>
+				</button>
+				
+			</div>
+		</nav>
+		<!--///////////////////////////////////////////////////-->
+		<div id="vuejs">
+		<div class="columns">
+			<!--#################################################-->
+			<div class="column">
+				<br>
+			</div>
+			<!--#################################################-->
+			<div class="column is-one-third is-centered has-text-centered" id="prueba">
+				<br>
+				<h2 class="is-banco"> Acceder a su cuenta</h2>
+				<br>
+				<p>
+					<input type="text" id="txtusr" placeholder="Usuario" v-model="USR">
+				</p>
+				<p>
+					<input type="password" id="txtpwd" placeholder="Contraseña" v-model="PWD">
+				</p>
+				<br>
+				<p>
+					<button class="button is-primary" type="button" id="btnok" @click="doLogin">Acceder</button>
+				</p>
+			</div>
+			<div class="column">
+				<br>
+			</div>
+		</div>
+		{% raw %}
+		<div id="modal" class="modal" :class="{ 'is-active': errorMsg }">
+			<div class="modal-background"></div>
+			<div class="modal-content is-grayl has-text-centered">
+				<br>
+				<strong>Usuario o Contraseña Inválido </strong>
+				<br>
+				<br>
+			</div>
+			<button id="btnclose" class="modal-close is-large" aria-label="close" @click="close()" ></button>
+		</div>
+		{% endraw %}
+			<!--///////////////////////////////////////////////////-->
+		</div>
+	</body>
+</html>
