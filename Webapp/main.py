@@ -116,9 +116,31 @@ async def registrar(request):
 		DAT = DAT
 	))
 	
+@app.route("/api/actualizar", methods=['POST'])
+async def actualizar(request):
+	if not 'GWY' in request.json:
+		return json({"R":403})
+	if not 'DSP' in request.json:
+		return json({"R":400, "D":"Mac" })
+	
+	return json(await api.actualizar(
+		DBO = DB,
+		GWY = request.json['GWY'],
+		DSP = request.json['DSP'],
+	))
+	
 @app.route("/api/obtenerTorres", methods=['GET'])
 async def obtenerTorres(request):
 	return json(await api.obtenerTorres(DBO = DB))
+	
+@app.route("/api/obtenerTrackme", methods=['POST'])
+async def obtenerTrackme(request):
+	if not 'TKN' in request.json:
+		return json({"R":403})
+	return json(await api.obtenerTrackme(
+		DBO = DB,
+		TKN = request.json['TKN']
+	))
 	
 if __name__ == "__main__":
     #app.run(host = WEBSRV_DATA["HOST"], port = WEBSRV_DATA["PORT"])

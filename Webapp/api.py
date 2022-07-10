@@ -147,19 +147,79 @@ async def registrar(DBO = None,GWY = None,DSP = None,DAT = None):
 	idtorre, = await R.fetchone()
 	#################################################
 	#################
-	from datetime import datetime
-	now = datetime.now()
 	#################
-	SQL = 'insert into entorres values(null,?,?,?)'
-	R = await db.execute(SQL,[DSP.upper(),idtorre,now.isoformat()])
+	SQL = 'insert into entorres values(null,?,?,datetime("now","localtime"))'
+	R = await db.execute(SQL,[DSP.upper(),idtorre])
 	print("entorres",R.lastrowid)
 	#################
 	if DAT:
 		for dman in DAT:
-			SQL = 'insert into cercatorres values(null,?,?,?,?)'
-			R = await db.execute(SQL,[dman.upper(),DSP.upper(),idtorre,now.isoformat()])
+			# revisar si el dispositivo esta registrado
+			SQL = 'select macaddress from dispositivo where macaddress = ?'
+			R = await db.execute(SQL,[dman.upper()])
+			if not R:
+				print("No Reg",dman.upper())
+				continue
+			
+			SQL = 'insert into cercatorres values(null,?,?,?,datetime("now","localtime"))'
+			R = await db.execute(SQL,[dman.upper(),DSP.upper(),idtorre])
 			print("entorres",R.lastrowid)
 	#await R.close()
 	await db.commit()
 	return { "R": 200 }
 ######################################################################
+async def actualizar(DBO = None,GWY = None,DSP = None):
+	if not DBO:
+		return { "R":500 , "D": "Database"}
+	if not GWY:
+		return { "R":400 , "D": "Gateway"}
+	if not DSP:
+		return { "R":400 , "D": "Mac"}
+		#################################################
+	db = await DBO.getDB()
+	#################################################
+	#################################################
+	# Si el dispositivo esta registrado
+	SQL = 'select macaddress from dispositivo where macaddress = ?'
+	R = await db.execute(SQL,[DSP])
+	if not R:
+		return { "R":400 , "D": "RegMac"}
+	#################################################
+	# obtener el gateway
+	idgateway, = await getidGateway(DBO,GWY)
+	print("Gateway",idgateway)
+	#################################################
+	db = await DBO.getDB()
+	#################################################
+	# To-Do support for serveral towels
+	SQL = 'select id from torre where gateway_id = ?'
+	R = await db.execute(SQL,[idgateway])
+	idtorre, = await R.fetchone()
+	#################################################
+	#################
+	SQL = 'insert into entorres values(null,?,?,datetime("now","localtime"))'
+	R = await db.execute(SQL,[DSP.upper(),idtorre])
+	print("entorres",R.lastrowid)
+	await R.close()
+	await db.commit()
+	return { "R": 200 }
+
+######################################################################
+async def obtenerTrackme(DBO = None,TKN = None):
+	if not DBO:
+		return { "R":500 , "D": "Database"}
+	if not TKN:
+		return { "R":400 , "D": "Token"}
+	
+	R = await checkToken(DBO,TKN)
+	if (R['R'] != 200):
+		return R
+	
+	#################################################
+	db = await DBO.getDB()
+	#################################################
+	SQL = 'select * from en torre where fechahora >= datetime("now","-30 seconds","localtime")'
+	R = await db.execute(SQL,[MAC.upper(),NOM,idusuario])
+	D = await R.fetchall()
+	await R.close()
+	return { "R": 200, "D": D}
