@@ -3,7 +3,9 @@ const mapa = {
 	content : {},
 	app : false,
 	grptorres : [],
+	trackmes : [],
 	ready : 0,
+	timeind : false,
 	canStart(){
 		if (this.ready == this.GO){
 			this.inicialize();
@@ -46,11 +48,65 @@ const mapa = {
 			this.app.stage.addChild(gpt);
 			this.grptorres.push(gpt);
 		});
+		/////////////////////////////////////////////
+		//setInterval(this.updateTrackme(),1000*20);
+		/////////////////////////////////////////////
+		this.timeind = Date.now();
+		/////////////////////////////////////////////
+		this.updateTrackme()
+		/////////////////////////////////////////////
+		this.app.ticker.add((delta) => this.gameLoop(delta));
+	},
+	gameLoop(delta) {
+		
+		let ahora = Date.now();
+		let deltatime = ahora - this.timeind;
+		if (deltatime > (1000*20)){
+			console.log(ahora);
+			this.updateTrackme();
+			this.timeind = ahora;
+		}
+		/*
+		this.trackmes.forEach( dispo => {
+			////////////////////////////
+			let gpt = new PIXI.Graphics();
+			// Circle + line style 1
+			gpt.lineStyle(2, 0xFEEB77, 1);
+			gpt.beginFill(0x650A5A, 0.25);
+			gpt.drawCircle(dispo["pos"][0], dispo["pos"][1], 120);
+			gpt.endFill();
+			this.app.stage.addChild(gpt);
+			this.grptorres.push(gpt);
+			////////////////////////////
+		});*/
+	},
+	updateTrackme(){
+		///////////////////////////////////////////////////////
+		var start = async () =>{
+			var params = {
+				method: 'POST', 
+				headers: new Headers({
+					'Content-Type': 'application/json'
+				}),
+				body: JSON.stringify({
+					TKN: localStorage.TKN,
+				})
+			};
+			
+			response = await fetch('/api/obtenerTrackme',params)
+			if (!response.ok)
+				throw new Error("WARN", response.status)
+			var R = response.json()
+			return R
+		};
+		start().then( (Resp) => {
+			console.log(Resp);
+		});
+		///////////////////////////////////////////////////////
 	}
 }
 ///////////////////////////////////////////////////////
 // Verificar la sesion
-this.TKN = localStorage.TKN;
 var verficar = async () =>{
 	var params = {
 		method: 'POST', 
@@ -58,7 +114,7 @@ var verficar = async () =>{
 			'Content-Type': 'application/json'
 		}),
 		body: JSON.stringify({
-			TKN: this.TKN
+			TKN: localStorage.TKN
 		})
 	};
 	

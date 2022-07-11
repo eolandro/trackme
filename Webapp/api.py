@@ -218,8 +218,8 @@ async def obtenerTrackme(DBO = None,TKN = None):
 	#################################################
 	db = await DBO.getDB()
 	#################################################
-	SQL = 'select * from en torre where fechahora >= datetime("now","-30 seconds","localtime")'
-	R = await db.execute(SQL,[MAC.upper(),NOM,idusuario])
+	SQL = 'select * from entorres where fechahora >= datetime("now","-30 seconds","localtime")'
+	R = await db.execute(SQL)
 	D = await R.fetchall()
 	await R.close()
 	return { "R": 200, "D": D}
