@@ -132,7 +132,9 @@ async def registrar(DBO = None,GWY = None,DSP = None,DAT = None):
 	# Si el dispositivo esta registrado
 	SQL = 'select macaddress from dispositivo where macaddress = ?'
 	R = await db.execute(SQL,[DSP])
-	if not R:
+	D = await R.fetchall()
+	print("Verificar: ",D)
+	if not D:
 		return { "R":400 , "D": "RegMac"}
 	#################################################
 	# obtener el gateway
@@ -157,7 +159,8 @@ async def registrar(DBO = None,GWY = None,DSP = None,DAT = None):
 			# revisar si el dispositivo esta registrado
 			SQL = 'select macaddress from dispositivo where macaddress = ?'
 			R = await db.execute(SQL,[dman.upper()])
-			if not R:
+			D = await R.fetchall()
+			if not D:
 				print("No Reg",dman.upper())
 				continue
 			
@@ -182,7 +185,9 @@ async def actualizar(DBO = None,GWY = None,DSP = None):
 	# Si el dispositivo esta registrado
 	SQL = 'select macaddress from dispositivo where macaddress = ?'
 	R = await db.execute(SQL,[DSP])
-	if not R:
+	D = await R.fetchall()
+	print("Verificar: ",D)
+	if not D:
 		return { "R":400 , "D": "RegMac"}
 	#################################################
 	# obtener el gateway

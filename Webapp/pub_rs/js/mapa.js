@@ -52,6 +52,7 @@ const mapa = {
 		//setInterval(this.updateTrackme(),1000*20);
 		/////////////////////////////////////////////
 		this.timeind = Date.now();
+		//this.timeind = 0;
 		/////////////////////////////////////////////
 		this.updateTrackme()
 		/////////////////////////////////////////////
@@ -65,20 +66,67 @@ const mapa = {
 			console.log(ahora);
 			this.updateTrackme();
 			this.timeind = ahora;
+			//////////////////////////////////////////
+			for (var i = 0; i < this.trackmes.length; i++){
+				let dispo = this.trackmes[i];
+				////////////////////////////
+				if (!this.trackmes[i]['gpt']){
+					//this.app.stage.removeChild(this.trackmes[i]['gpt']);
+					//////////////////////////////
+					let cnt = new PIXI.Container();
+					//////////////////////////////
+					let gpt = new PIXI.Graphics();
+					gpt.clear();
+					gpt.lineStyle(3, 0xFEEB77, 1);
+					gpt.beginFill(0x058400, 1);
+					gpt.drawCircle(0, 0, 20);
+					gpt.endFill();
+					
+					let txt = new PIXI.Text(
+						this.trackmes[i]['MAC'],
+						{
+							fontFamily : 'Arial', 
+							fontSize: 10, 
+							fill : 0xFF0000, 
+							align : 'center'
+					});
+					
+					cnt.addChild(gpt);
+					cnt.addChild(txt);
+					
+					this.app.stage.addChild(cnt);
+					this.trackmes[i]['gpt'] = cnt;
+				}
+				////////////////////////////
+				let x = 0;
+				let y = 0;
+				this.content['torres'].forEach( torre => {
+					if(torre["id"] == dispo["idTorre"]){
+						x = torre["pos"][0]; 
+						y = torre["pos"][1];
+						if (x < 360){
+							x = x + Math.floor(Math.random() * 30);
+							y = y + Math.floor(Math.random() * 30);
+						}else{
+							x = x - Math.floor(Math.random() * 30);
+							y = y - Math.floor(Math.random() * 30);
+						}
+					}
+					//////////////////////////////////////////////
+					// mover contenedor
+					if (this.trackmes[i]['visible']){
+						this.trackmes[i]['gpt'].x = x;
+						this.trackmes[i]['gpt'].y = y;
+					}else{
+						this.trackmes[i]['gpt'].x = 0;
+						this.trackmes[i]['gpt'].y = 0;
+					}
+					//////////////////////////////////////////////
+				});
+				////////////////////////////
+			}
+			//////////////////////////////////////////
 		}
-		/*
-		this.trackmes.forEach( dispo => {
-			////////////////////////////
-			let gpt = new PIXI.Graphics();
-			// Circle + line style 1
-			gpt.lineStyle(2, 0xFEEB77, 1);
-			gpt.beginFill(0x650A5A, 0.25);
-			gpt.drawCircle(dispo["pos"][0], dispo["pos"][1], 120);
-			gpt.endFill();
-			this.app.stage.addChild(gpt);
-			this.grptorres.push(gpt);
-			////////////////////////////
-		});*/
 	},
 	updateTrackme(){
 		///////////////////////////////////////////////////////
@@ -101,6 +149,32 @@ const mapa = {
 		};
 		start().then( (Resp) => {
 			console.log(Resp);
+			if (Resp.R = 200){
+				/////////////////////////
+				for(var i = 0; i < this.trackmes.length; i++){
+					this.trackmes[i]["visible"] = false;
+				}
+				/////////////////////////
+				Resp.D.forEach( (valor) => {
+					let vdata = {
+							"idTorre" : valor[2],
+							"MAC": valor[1],
+							"gpt" : false,
+							"visible": true
+					};
+					let encontrado = -1;
+					for(var i = 0; i < this.trackmes.length; i++){
+						if (this.trackmes[i]['MAC'] == vdata['MAC']){
+							encontrado = i;
+						}
+					}
+					if (encontrado == -1){
+						this.trackmes.push(vdata);
+					}else{
+						this.trackmes[encontrado]["visible"] = true;
+					}
+				});
+			}
 		});
 		///////////////////////////////////////////////////////
 	}
