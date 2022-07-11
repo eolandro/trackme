@@ -29,11 +29,12 @@ def vecindario():
 	}
 	print(carga_Util)
 	try:
-		requests.post(
-			CLOUD_SERVER + "/registrar", 
+		R = requests.post(
+			CLOUD_SERVER + "/api/registrar", 
 			headers = {'content-type': 'application/json'}, 
 			data = json.dumps(carga_Util)
 		)
+		print(R.content)
 	except Exception as err:
 		pass
 	else:
@@ -57,11 +58,12 @@ def ping():
 	print(carga_Util)
 	#######################################
 	try:
-		requests.post(
-			CLOUD_SERVER + "/actualizar",
+		R = requests.post(
+			CLOUD_SERVER + "/api/actualizar",
 			headers = {'content-type': 'application/json'}, 
 			data = json.dumps(carga_Util)
 		)
+		print(R.content)
 	except Exception as err:
 		pass
 	else:
