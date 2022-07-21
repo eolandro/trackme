@@ -83,7 +83,7 @@ window.app = new Vue({
 				console.log(Resp);
 				switch(Resp.R){
 					case 200:
-						alert("Cuardado");
+						alert("Guardado");
 						window.location.href = '/home';
 						//console.log("Yei!!");
 					break;
