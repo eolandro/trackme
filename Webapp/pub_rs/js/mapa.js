@@ -62,7 +62,7 @@ const mapa = {
 		
 		let ahora = Date.now();
 		let deltatime = ahora - this.timeind;
-		if (deltatime > (1000*20)){
+		if (deltatime > (1000*10)){
 			console.log(ahora);
 			this.updateTrackme();
 			this.timeind = ahora;
@@ -101,7 +101,9 @@ const mapa = {
 				let x = 0;
 				let y = 0;
 				this.content['torres'].forEach( torre => {
+					console.log(torre["id"],dispo["idTorre"]);
 					if(torre["id"] == dispo["idTorre"]){
+						console.log("Test");
 						x = torre["pos"][0]; 
 						y = torre["pos"][1];
 						if (x < 360){
@@ -172,6 +174,7 @@ const mapa = {
 						this.trackmes.push(vdata);
 					}else{
 						this.trackmes[encontrado]["visible"] = true;
+						this.trackmes[encontrado]["idTorre"] = vdata["idTorre"];
 					}
 				});
 			}

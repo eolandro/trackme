@@ -138,7 +138,11 @@ async def registrar(DBO = None,GWY = None,DSP = None,DAT = None):
 		return { "R":400 , "D": "RegMac"}
 	#################################################
 	# obtener el gateway
-	idgateway, = await getidGateway(DBO,GWY)
+	T = await getidGateway(DBO,GWY)
+	if not T:
+		print("No Gateway")
+		return { "R":400 , "D": "No Gateway"}
+	idgateway, = T
 	print("Gateway",idgateway)
 	#################################################
 	db = await DBO.getDB()
@@ -191,7 +195,11 @@ async def actualizar(DBO = None,GWY = None,DSP = None):
 		return { "R":400 , "D": "RegMac"}
 	#################################################
 	# obtener el gateway
-	idgateway, = await getidGateway(DBO,GWY)
+	T = await getidGateway(DBO,GWY)
+	if not T:
+		print("No Gateway")
+		return { "R":400 , "D": "No Gateway"}
+	idgateway, = T
 	print("Gateway",idgateway)
 	#################################################
 	db = await DBO.getDB()
